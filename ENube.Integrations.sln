@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ENube.Integrations.API", "ENube.Integrations.API\ENube.Integrations.API.csproj", "{B9ED7DA5-69C5-46F3-9101-222CA6F95640}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENube.Integrations.Application", "ENube.Integrations.Application\ENube.Integrations.Application.csproj", "{7C8E0383-B83B-41D5-BA71-168BA72030F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9ED7DA5-69C5-46F3-9101-222CA6F95640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9ED7DA5-69C5-46F3-9101-222CA6F95640}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9ED7DA5-69C5-46F3-9101-222CA6F95640}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9ED7DA5-69C5-46F3-9101-222CA6F95640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C8E0383-B83B-41D5-BA71-168BA72030F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C8E0383-B83B-41D5-BA71-168BA72030F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C8E0383-B83B-41D5-BA71-168BA72030F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C8E0383-B83B-41D5-BA71-168BA72030F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66222A27-499D-4F5D-978B-7F0B9C68D402}
+	EndGlobalSection
+EndGlobal
