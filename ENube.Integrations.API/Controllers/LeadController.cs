@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using ENube.Integrations.Application.Contracts;
+using ENube.Integrations.Application.Services.CRM;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ENube.Integrations.API.Controllers
@@ -10,6 +10,12 @@ namespace ENube.Integrations.API.Controllers
     [ApiController]
     public class LeadController : ControllerBase
     {
+        protected readonly CRMService _crmService;
+
+        public LeadController(CRMService crmService)
+        {
+            _crmService = crmService;
+        }
 
         [HttpPost("lead/zap")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -20,7 +20,12 @@ namespace ENube.Integrations
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(opt => 
+                {
+                    opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
 
             ENubeConfiguration.ConfigureServices(services, Configuration);
         }
@@ -37,12 +42,15 @@ namespace ENube.Integrations
                 app.UseHsts();
             }
 
-            
+            app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseResponseCompression();
             app.UseSwagger();
             app.UseSwaggerUI(opt => 
             {
                 opt.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.0");
                 opt.RoutePrefix = string.Empty;
+                opt.DefaultModelsExpandDepth(-1);
+                opt.DisplayRequestDuration();
             });
 
             app.UseHttpsRedirection();
