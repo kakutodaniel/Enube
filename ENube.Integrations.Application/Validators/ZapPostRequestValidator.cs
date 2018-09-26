@@ -14,7 +14,6 @@ namespace ENube.Integrations.Application.Validators
 
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
-            //TODO: add log
 
         }
 

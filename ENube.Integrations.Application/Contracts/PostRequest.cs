@@ -1,38 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-
-namespace ENube.Integrations.Application.Contracts
+﻿namespace ENube.Integrations.Application.Contracts
 {
     public class PostRequest
     {
-        [JsonProperty("name")]
-        [FromQuery(Name = "name")]
-        public string Nome { get; set; }
 
-        [JsonProperty("emailAddress")]
-        [FromQuery(Name = "emailAddress")]
-        public string Email { get; set; }
+        public string name { get; set; }
 
-        [JsonProperty("phoneNumber")]
-        [FromQuery(Name = "phoneNumber")]
-        public string Telefone { get; set; }
+        public string emailAddress { get; set; }
 
-        [JsonProperty("description")]
-        [FromQuery(Name = "description")]
-        public string Descricao { get; set; }
+        public string phoneNumber { get; set; }
+  
+        public string description { get; set; }
 
-        [JsonProperty("createdById")]
-        [FromQuery(Name = "createdById")]
-        public string CriadoPor { get; set; }
+        public string createdById { get; set; }
 
-        [JsonProperty("viuAlgumaComunicaoDoProduto")]
-        [FromQuery(Name = "viuAlgumaComunicaoDoProduto")]
-        public string ViuComunicacao { get; set; }
+        public string viuAlgumaComunicaoDoProduto { get; set; }
 
-        [JsonProperty("empreendimentosId")]
-        [FromQuery(Name = "empreendimentosId")]
-        public string EmpreendimentosIds { get; set; }
-
-
+        public string empreendimentosId { get; set; }
     }
 }

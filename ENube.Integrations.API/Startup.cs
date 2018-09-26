@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using FluentValidation.AspNetCore;
+using ENube.Integrations.Application.Validators;
+using System;
 
 namespace ENube.Integrations
 {
@@ -22,10 +25,22 @@ namespace ENube.Integrations
         {
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(opt => 
+                .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
+                //.AddFluentValidation(opt =>
+                //{
+                //    opt.RegisterValidatorsFromAssemblyContaining<LeadPostRequestValidator>();
+                //    opt.RegisterValidatorsFromAssemblyContaining<ZapPostRequestValidator>();
+                //});
+
+            services.AddHsts(opt =>
+            {
+                opt.IncludeSubDomains = true;
+                opt.Preload = true;
+                opt.MaxAge = TimeSpan.FromMinutes(5);
+            });
 
             ENubeConfiguration.ConfigureServices(services, Configuration);
         }
@@ -45,7 +60,7 @@ namespace ENube.Integrations
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseResponseCompression();
             app.UseSwagger();
-            app.UseSwaggerUI(opt => 
+            app.UseSwaggerUI(opt =>
             {
                 opt.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1.0");
                 opt.RoutePrefix = string.Empty;
