@@ -40,7 +40,7 @@ namespace ENube.Integrations.Application.Services.CRM
                 _logger.LogInformation($"Realizando POST no CRM - Payload: [{payload}]");
 
                 var result = await _httpClient.PostAsync(
-                        _crmSettings.Endpoint,
+                        _crmSettings.PostEndpoint,
                         new StringContent(payload, Encoding.UTF8, _crmSettings.ContentType)
                     );
 
@@ -60,6 +60,7 @@ namespace ENube.Integrations.Application.Services.CRM
                         var headerDataParse = JsonConvert.DeserializeObject<Dictionary<string, string>>(headerStatus);
                         if (headerDataParse.ContainsKey("reason"))
                         {
+                            _logger.LogInformation($"POST no CRM realizado com ERRO - Reason: [{headerDataParse["reason"]}]");
                             response.Mensagem = headerDataParse["reason"];
                         }
                     }
@@ -67,10 +68,36 @@ namespace ENube.Integrations.Application.Services.CRM
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"ERRO ao realizar POST no CRM {_crmSettings.UrlBase}/{_crmSettings.Endpoint}");
+                _logger.LogError(ex, $"ERRO ao realizar POST no CRM {_crmSettings.UrlBase}/{_crmSettings.PostEndpoint}");
             }
 
             return response;
+        }
+
+
+        public async Task<bool> ExistsAsync(string id)
+        {
+
+            try
+            {
+                _logger.LogInformation($"Realizando GET no CRM - id: [{id}]");
+
+                var result = await _httpClient.GetAsync(_crmSettings.GetEndpoint);
+
+                if (result.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation($"GET no CRM realizado com SUCESSO - StatusCode: [{(int)result.StatusCode}]");
+                    return true;
+                }
+
+                _logger.LogInformation($"GET no CRM realizado com ERRO - StatusCode: [{(int)result.StatusCode}]");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"ERRO ao realizar GET no CRM {_crmSettings.UrlBase}/{_crmSettings.GetEndpoint}");
+                return false;
+            }
         }
     }
 }

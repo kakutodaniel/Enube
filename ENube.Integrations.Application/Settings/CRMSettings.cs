@@ -7,7 +7,9 @@
 
         public string UrlBase { get; set; }
 
-        public string Endpoint { get; set; }
+        public string PostEndpoint { get; set; }
+
+        public string GetEndpoint { get; set; }
 
         public string ContentType { get; set; }
 

@@ -5,11 +5,12 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
 {
     public class PostRequest
     {
+
         [JsonProperty("name")]
         public string Nome { get; set; }
 
         [JsonProperty("deleted")]
-        public bool Excluido { get; set; } = false;
+        public bool Excluido { get; set; }
 
         [JsonProperty("firstName")]
         public string PrimeiroNome { get; set; }
@@ -37,7 +38,6 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
 
         [JsonProperty("createdByName")]
         public string CriadoPorNome { get; set; } = "Admin";
-
 
     }
 }
