@@ -5,13 +5,13 @@ namespace ENube.Integrations.Application.Errors
     public enum EENubeErrors
     {
         [Description("'{PropertyName}' é requerido")]
-        Campo_Requerido,
+        CampoRequerido,
 
         [Description("'{PropertyName}' inválido")]
-        Email_Invalido,
+        EmailInvalido,
 
         [Description("'{PropertyName}' deve ter entre 5 e 50 caracteres")]
-        Range_Tamanho_5_a_50
+        RangeTamanho5A50
 
 
     }

@@ -1,5 +1,6 @@
 ﻿using ENube.Integrations.Application.Services.CRM;
 using ENube.Integrations.Application.Settings;
+using ENube.Integrations.Application.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -59,7 +60,8 @@ namespace ENube.Integrations.Application
             services.AddResponseCompression(opt => opt.Providers.Add<GzipCompressionProvider>());
 
             //settings
-            services.Configure<CRMSettings>(configuration.GetSection(nameof(CRMSettings)));
+            //services.Configure<CRMSettings>(configuration.GetSection(nameof(CRMSettings)));
+            services.Configure<CRMSettings>(configuration.GetSection(CRMSettings.Section));
             services.TryAddSingleton(resolver => resolver.GetRequiredService<IOptions<CRMSettings>>().Value);
 
             //services
@@ -67,15 +69,14 @@ namespace ENube.Integrations.Application
 
             //config httpClient typed
             var crmSettings = configuration.GetSection(CRMSettings.Section).Get<CRMSettings>();
+            var basicToken = ($"{crmSettings.User}:{crmSettings.Password}").Base64Encode();
+
             services.AddHttpClient<CRMService>(opt =>
             {
                 opt.BaseAddress = new Uri(crmSettings.UrlBase);
                 opt.DefaultRequestHeaders.Accept.Clear();
                 opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(crmSettings.ContentType));
-
-                //TODO: checar
-                //opt.DefaultRequestHeaders.Add("Content-type", crmSettings.ContentType);
-                //opt.DefaultRequestHeaders.Add("Authorization", crmSettings.Authorization);
+                opt.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicToken);
 
             }) //retry 2 times every 600 ms
             .AddTransientHttpErrorPolicy(opt => opt.WaitAndRetryAsync(2, x => TimeSpan.FromMilliseconds(600)));
