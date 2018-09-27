@@ -14,6 +14,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Linq;
 using System.Net.Http.Headers;
+using ENube.Integrations.Application.Services;
+using AutoMapper;
+using ENube.Integrations.Application.Mappings;
 
 namespace ENube.Integrations.Application
 {
@@ -22,6 +25,7 @@ namespace ENube.Integrations.Application
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            //IOptions
             services.AddOptions();
 
             //config swashbuckle
@@ -66,6 +70,7 @@ namespace ENube.Integrations.Application
 
             //services
             services.TryAddScoped<CRMService>();
+            services.TryAddScoped<LeadService>();
 
             //config httpClient typed
             var crmSettings = configuration.GetSection(CRMSettings.Section).Get<CRMSettings>();
@@ -89,6 +94,21 @@ namespace ENube.Integrations.Application
                 opt.AddFile(configuration.GetSection("Logging"));
                 opt.AddConfiguration(configuration.GetSection("Logging"));
             });
+
+            //automapper
+            Mapper.Initialize(config =>
+            {
+                config.AllowNullCollections = true;
+                config.AllowNullDestinationValues = true;
+                config.CreateMissingTypeMaps = true;
+                config.EnableNullPropagationForQueryMapping = true;
+
+                config.AddProfile(new PostRequestMap());
+                config.AddProfile(new ZapPostRequestMap());
+
+            });
+
+            services.TryAddSingleton(Mapper.Instance);
 
         }
 

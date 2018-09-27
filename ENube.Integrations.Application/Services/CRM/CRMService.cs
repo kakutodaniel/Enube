@@ -2,12 +2,13 @@
 using ENube.Integrations.Application.Settings;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using ENube.Integrations.Application.Services.CRM.Views;
 
 namespace ENube.Integrations.Application.Services.CRM
 {
@@ -27,7 +28,6 @@ namespace ENube.Integrations.Application.Services.CRM
             _logger = logger;
         }
 
-
         public async Task<PostResponse> PostAsync(PostRequest request)
         {
 
@@ -37,7 +37,7 @@ namespace ENube.Integrations.Application.Services.CRM
             {
                 var payload = JsonConvert.SerializeObject(request);
 
-                _logger.LogInformation($"Realizando POST no CRM - Payload: [{payload}]");
+                _logger.LogInformation($"Salvando dados no CRM - Payload: [{payload}]");
 
                 var result = await _httpClient.PostAsync(
                         _crmSettings.PostEndpoint,
@@ -48,54 +48,57 @@ namespace ENube.Integrations.Application.Services.CRM
 
                 if (result.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"POST no CRM realizado com SUCESSO - StatusCode: [{response.CodigoStatus}]");
+                    _logger.LogInformation($"Dados salvo com sucesso no CRM - StatusCode: [{response.CodigoStatus}]");
                     response.Sucesso = true;
                 }
                 else
                 {
-                    _logger.LogInformation($"POST no CRM realizado com ERRO - StatusCode: [{response.CodigoStatus}]");
+                    _logger.LogInformation($"Dados não foram salvos com sucesso no CRM - StatusCode: [{response.CodigoStatus}]");
                     var headerStatus = result.Headers.GetValues("x-status-reason").FirstOrDefault();
                     if (headerStatus != null)
                     {
-                        var headerDataParse = JsonConvert.DeserializeObject<Dictionary<string, string>>(headerStatus);
-                        if (headerDataParse.ContainsKey("reason"))
-                        {
-                            _logger.LogInformation($"POST no CRM realizado com ERRO - Reason: [{headerDataParse["reason"]}]");
-                            response.Mensagem = headerDataParse["reason"];
-                        }
+                        var headerDataParse = JsonConvert.DeserializeObject<ErrorView>(headerStatus);
+                        _logger.LogInformation($"Dados não foram salvos com sucesso no CRM - Reason: [{headerDataParse.reason}]");
+                        response.Mensagem = headerDataParse.reason;
+                    }
+                    else
+                    {
+                        response.Mensagem = "I) Erro inesperado ao salvar dados no CRM";
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"ERRO ao realizar POST no CRM {_crmSettings.UrlBase}/{_crmSettings.PostEndpoint}");
+                _logger.LogError(ex, $"Erro ao salvar dados no CRM {_crmSettings.UrlBase}/{_crmSettings.PostEndpoint}");
+                response.CodigoStatus = (int)HttpStatusCode.InternalServerError;
+                response.Mensagem = "II) Erro inesperado ao salvar dados no CRM";
             }
 
             return response;
         }
 
 
-        public async Task<bool> ExistsAsync(string id)
+        public async Task<bool> ExistsCompanyAsync(string id)
         {
 
             try
             {
-                _logger.LogInformation($"Realizando GET no CRM - id: [{id}]");
+                _logger.LogInformation($"Realizando busca de empresa no CRM - id: [{id}]");
 
-                var result = await _httpClient.GetAsync(_crmSettings.GetEndpoint);
+                var result = await _httpClient.GetAsync($"{_crmSettings.GetEndpoint}/{id}");
 
                 if (result.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"GET no CRM realizado com SUCESSO - StatusCode: [{(int)result.StatusCode}]");
+                    _logger.LogInformation($"Empresa encontrada no CRM - StatusCode: [{(int)result.StatusCode}]");
                     return true;
                 }
 
-                _logger.LogInformation($"GET no CRM realizado com ERRO - StatusCode: [{(int)result.StatusCode}]");
+                _logger.LogInformation($"Empresa não encontrada no CRM - StatusCode: [{(int)result.StatusCode}]");
                 return false;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"ERRO ao realizar GET no CRM {_crmSettings.UrlBase}/{_crmSettings.GetEndpoint}");
+                _logger.LogError(ex, $"Erro ao realizar busca de empresa no CRM {_crmSettings.UrlBase}/{_crmSettings.GetEndpoint}");
                 return false;
             }
         }

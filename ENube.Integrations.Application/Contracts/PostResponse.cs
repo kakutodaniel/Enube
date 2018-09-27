@@ -1,19 +1,12 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ENube.Integrations.Application.Contracts
 {
     public class PostResponse
     {
 
-        [JsonProperty("sucesso")]
-        public bool Sucesso { get; set; }
+        public List<string> erros { get; set; } = new List<string>();
 
-        [JsonProperty("mensagem")]
-        public string Mensagem { get; set; }
-
-        [JsonProperty("erros")]
-        public List<string> Erros { get; set; } = new List<string>();
-
+        public int statusCode { get; set; }
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
+using System.Threading.Tasks;
 using ENube.Integrations.Application.Contracts;
-using ENube.Integrations.Application.Services.CRM;
-using ENube.Integrations.Application.Validators;
+using ENube.Integrations.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ENube.Integrations.API.Controllers
@@ -12,70 +11,45 @@ namespace ENube.Integrations.API.Controllers
     [ApiController]
     public class LeadController : ControllerBase
     {
-        protected readonly CRMService _crmService;
+        protected readonly LeadService _leadService;
 
-        public LeadController(CRMService crmService)
+        public LeadController(LeadService leadService)
         {
-            _crmService = crmService;
+            _leadService = leadService;
         }
 
         [HttpPost("lead/zap")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
-        public void PostZap([FromBody] ZapPostRequest request)
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        public async Task<IActionResult> PostZap([FromBody] ZapPostRequest request)
         {
-
-
+            var result = await _leadService.SaveZapLead(request);
+            return StatusCode(result.statusCode, result);
         }
 
         [HttpPost("lead")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
-        public IActionResult PostGeneric([FromBody] PostRequest request)
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        public async Task<IActionResult> PostGeneric([FromBody] PostRequest request)
         {
-            var response = new PostResponse();
-            var validator = new LeadPostRequestValidator();
-            var results = validator.Validate(request);
-
-            if (!results.IsValid)
-            {
-                results.Errors.ToList().ForEach(x => response.Erros.Add(x.ErrorMessage));
-
-                return BadRequest(response);
-            }
-
-            //TODO: call service
-
-            response.Sucesso = true;
-            return Ok(response);
+            var result = await _leadService.SaveGenericLead(request);
+            return StatusCode(result.statusCode, result);
         }
 
 
         [HttpGet("lead")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
-        public IActionResult Get([FromQuery] PostRequest request)
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        public async Task<IActionResult> Get([FromQuery] PostRequest request)
         {
-
-            var response = new PostResponse();
-            var validator = new LeadPostRequestValidator();
-            var results = validator.Validate(request);
-
-            if (!results.IsValid)
-            {
-                results.Errors.ToList().ForEach(x => response.Erros.Add(x.ErrorMessage));
-
-                return BadRequest(response);
-            }
-
-            //TODO: call service
-
-            response.Sucesso = true;
-            return Ok(response);
-
+            var result = await _leadService.SaveGenericLead(request);
+            return StatusCode(result.statusCode, result);
         }
     }
 }
