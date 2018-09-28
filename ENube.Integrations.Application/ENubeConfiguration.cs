@@ -33,6 +33,8 @@ namespace ENube.Integrations.Application
             {
                 opt.SwaggerDoc("v1.0", new Info { Title = "ENube Integrations API", Version = "v1.0" });
 
+                opt.AddSecurityDefinition("Basic", new ApiKeyScheme { In = "Header", Description = "Por favor, insira o token com Basic no campo", Name = "Authorization", Type = "apiKey" });
+
                 opt.DocInclusionPredicate((version, apiDescription) =>
                 {
                     var values = apiDescription.RelativePath

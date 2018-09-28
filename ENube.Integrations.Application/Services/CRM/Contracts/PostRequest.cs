@@ -37,7 +37,22 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
         public string CriadoPorId { get; set; } = "1";
 
         [JsonProperty("createdByName")]
-        public string CriadoPorNome { get; set; } = "Admin";
+        public string CriadoPorNome { get; set; }
+
+        [JsonProperty("empreendimentosId")]
+        public string EmpreendimentosId { get; set; }
+
+        [JsonProperty("viuAlgumaComunicaoDoProduto")]
+        public string ViuAlgumaComunicacao { get; set; }
+
+        [JsonProperty("empresaResponsavelId")]
+        public string EmpresaResponsavelId { get; set; }
+
+        [JsonProperty("source")]
+        public string Source { get; set; }
+
+        [JsonProperty("forceDuplicate")]
+        public bool ForceDuplicate { get; set; } = true;
 
     }
 }

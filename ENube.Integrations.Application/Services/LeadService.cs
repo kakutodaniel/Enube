@@ -14,17 +14,17 @@ namespace ENube.Integrations.Application.Services
     public class LeadService
     {
         protected readonly ILogger<LeadService> _logger;
-        protected readonly CRMService _CRMService;
         protected readonly IMapper _mapper;
+        protected readonly CRMService _CRMService;
 
         public LeadService(
             ILogger<LeadService> logger,
-            CRMService CRMService,
-            IMapper mapper)
+            IMapper mapper,
+            CRMService CRMService)
         {
             _logger = logger;
-            _CRMService = CRMService;
             _mapper = mapper;
+            _CRMService = CRMService;
         }
 
         public async Task<PostResponse> SaveGenericLead(PostRequest request)
@@ -82,15 +82,15 @@ namespace ENube.Integrations.Application.Services
             }
 
             //TODO: ID cONTROLE ??
-            var companyExists = await _CRMService.ExistsCompanyAsync(request.id_controle);
+            //var companyExists = await _CRMService.ExistsCompanyAsync(request.id_controle);
 
-            if (!companyExists)
-            {
-                response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
-                response.statusCode = (int)HttpStatusCode.NotFound;
+            //if (!companyExists)
+            //{
+            //    response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
+            //    response.statusCode = (int)HttpStatusCode.NotFound;
 
-                return response;
-            }
+            //    return response;
+            //}
 
             var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
             var resultCRM = await _CRMService.PostAsync(postCRM);

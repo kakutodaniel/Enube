@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ENube.Integrations.Application.Contracts;
 using ENube.Integrations.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ENube.Integrations.API.Controllers

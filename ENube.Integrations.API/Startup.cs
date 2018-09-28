@@ -1,12 +1,11 @@
-﻿using ENube.Integrations.Application;
+﻿using System;
+using ENube.Integrations.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation.AspNetCore;
-using ENube.Integrations.Application.Validators;
-using System;
+using ENube.Integrations.Application.Middlewares;
 
 namespace ENube.Integrations
 {
@@ -29,11 +28,6 @@ namespace ENube.Integrations
                 {
                     opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
-                //.AddFluentValidation(opt =>
-                //{
-                //    opt.RegisterValidatorsFromAssemblyContaining<LeadPostRequestValidator>();
-                //    opt.RegisterValidatorsFromAssemblyContaining<ZapPostRequestValidator>();
-                //});
 
             services.AddHsts(opt =>
             {
@@ -57,8 +51,10 @@ namespace ENube.Integrations
                 app.UseHsts();
             }
 
+            app.UseMiddleware<BasicAuthMiddleware>("");
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseResponseCompression();
+
             app.UseSwagger();
             app.UseSwaggerUI(opt =>
             {
@@ -69,6 +65,7 @@ namespace ENube.Integrations
             });
 
             app.UseHttpsRedirection();
+
             app.UseMvc();
         }
     }
