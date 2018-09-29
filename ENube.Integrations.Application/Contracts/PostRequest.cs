@@ -13,7 +13,9 @@
 
         public string createdById { get; set; }
 
-        public string viuAlgumaComunicaoDoProduto { get; set; }
+        public string midia { get; set; }
+
+        public string source { get; set; }
 
         public string empreendimentosId { get; set; }
     }

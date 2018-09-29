@@ -17,6 +17,9 @@ namespace ENube.Integrations.Application.Mappings
                 .ForMember(dest => dest.SobreNome, opt => opt.MapFrom(src => src.name.GetLastName()))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.emailAddress))
                 .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.phoneNumber))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
+                .ForMember(dest => dest.Midia, opt => opt.MapFrom(src => src.midia))
+                .ForMember(dest => dest.Origem, opt => opt.MapFrom(src => src.source))
                 .ForMember(dest => dest.CriadoPorId, opt => opt.MapFrom(src => src.createdById));
         }
 

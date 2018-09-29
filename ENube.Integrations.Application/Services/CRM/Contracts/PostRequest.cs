@@ -30,6 +30,9 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
         [JsonProperty("phoneNumber")]
         public string Telefone { get; set; }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("createdAt")]
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
@@ -38,6 +41,15 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
 
         [JsonProperty("createdByName")]
         public string CriadoPorNome { get; set; } = "Admin";
+
+        [JsonProperty("forceDuplicate")]
+        public bool ForceDuplicate { get; set; } = true;
+
+        [JsonProperty("viuAlgumaComunicaoDoProduto")]
+        public string Midia { get; set; }
+
+        [JsonProperty("source")]
+        public string Origem { get; set; }
 
     }
 }
