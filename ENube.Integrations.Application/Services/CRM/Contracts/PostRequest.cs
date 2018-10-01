@@ -45,14 +45,8 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
         [JsonProperty("empreendimentosId")]
         public string EmpreendimentosId { get; set; }
 
-        [JsonProperty("viuAlgumaComunicaoDoProduto")]
-        public string ViuAlgumaComunicacao { get; set; }
-
         [JsonProperty("empresaResponsavelId")]
         public string EmpresaResponsavelId { get; set; }
-
-        [JsonProperty("source")]
-        public string Source { get; set; }
 
         [JsonProperty("forceDuplicate")]
         public bool ForceDuplicate { get; set; } = true;
@@ -66,16 +60,3 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
     }
 }
 
-
-
-  //"name": "Nicolas Carvalho", (Required)
-  //"deleted": false, (Required)
-  // "firstName": "Nicolas", (Required)
-  //"lastName": "Carvalho", (Required)
-  //"isActive": true, (Required)
-  //"title": "", (Required)
-  //"emailAddress":  nicolas @enube.me", (Required)
-  //"phoneNumber": null, (Required)
-  //"createdAt": "2018-03-12 17:06:20", (Required)
-  //"createdById": "1", (Required)
-  //"createdByName": "Admin" (Required)

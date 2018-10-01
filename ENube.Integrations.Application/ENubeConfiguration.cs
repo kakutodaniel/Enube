@@ -1,6 +1,5 @@
 ﻿using ENube.Integrations.Application.Services.CRM;
 using ENube.Integrations.Application.Settings;
-using ENube.Integrations.Application.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -17,6 +16,7 @@ using System.Net.Http.Headers;
 using ENube.Integrations.Application.Services;
 using AutoMapper;
 using ENube.Integrations.Application.Mappings;
+using ENube.Integrations.Application.Filters;
 
 namespace ENube.Integrations.Application
 {
@@ -31,9 +31,11 @@ namespace ENube.Integrations.Application
             //config swashbuckle
             services.AddSwaggerGen(opt =>
             {
+                opt.OperationFilter<AddAuthorizationHeaderParameterOperationFilter>();
+
                 opt.SwaggerDoc("v1.0", new Info { Title = "ENube Integrations API", Version = "v1.0" });
 
-                opt.AddSecurityDefinition("Basic", new ApiKeyScheme { In = "Header", Description = "Por favor, insira o token com Basic no campo", Name = "Authorization", Type = "apiKey" });
+                //opt.AddSecurityDefinition("Basic", new ApiKeyScheme { In = "Header", Description = "Por favor, insira o token com Basic no campo", Name = "Authorization", Type = "apiKey" });
 
                 opt.DocInclusionPredicate((version, apiDescription) =>
                 {
@@ -76,14 +78,14 @@ namespace ENube.Integrations.Application
 
             //config httpClient typed
             var crmSettings = configuration.GetSection(CRMSettings.Section).Get<CRMSettings>();
-            var basicToken = ($"{crmSettings.User}:{crmSettings.Password}").Base64Encode();
+            //var basicToken = ($"{crmSettings.User}:{crmSettings.Password}").Base64Encode();
 
             services.AddHttpClient<CRMService>(opt =>
             {
                 opt.BaseAddress = new Uri(crmSettings.UrlBase);
                 opt.DefaultRequestHeaders.Accept.Clear();
                 opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(crmSettings.ContentType));
-                opt.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicToken);
+                //opt.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicToken);
 
             }) //retry 2 times every 600 ms
             .AddTransientHttpErrorPolicy(opt => opt.WaitAndRetryAsync(2, x => TimeSpan.FromMilliseconds(600)));
@@ -111,6 +113,9 @@ namespace ENube.Integrations.Application
             });
 
             services.TryAddSingleton(Mapper.Instance);
+
+            //context
+            services.AddHttpContextAccessor();
 
         }
 

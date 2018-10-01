@@ -1,6 +1,6 @@
 ﻿namespace ENube.Integrations.Application.Services.CRM.Contracts
 {
-    public class PostResponse
+    public class StatusResponse
     {
         public int CodigoStatus { get; set; }
 

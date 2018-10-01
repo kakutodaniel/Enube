@@ -13,9 +13,9 @@ namespace ENube.Integrations.Application.Services
 {
     public class LeadService
     {
-        protected readonly ILogger<LeadService> _logger;
-        protected readonly IMapper _mapper;
-        protected readonly CRMService _CRMService;
+        private readonly ILogger<LeadService> _logger;
+        private readonly IMapper _mapper;
+        private readonly CRMService _CRMService;
 
         public LeadService(
             ILogger<LeadService> logger,
@@ -41,12 +41,20 @@ namespace ENube.Integrations.Application.Services
                 return response;
             }
 
-            var companyExists = await _CRMService.ExistsCompanyAsync(request.empreendimentosId);
+            var resultExistsCompany = await _CRMService.CheckCompanyAsync(request.empreendimentosId);
 
-            if (!companyExists)
+            if (!resultExistsCompany.Sucesso)
             {
-                response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
-                response.statusCode = (int)HttpStatusCode.NotFound;
+                if(resultExistsCompany.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
+                }
+                
+                response.statusCode = resultExistsCompany.CodigoStatus;
 
                 return response;
             }
@@ -56,7 +64,15 @@ namespace ENube.Integrations.Application.Services
 
             if (!resultCRM.Sucesso)
             {
-                response.erros.Add(resultCRM.Mensagem);
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+                
                 response.statusCode = resultCRM.CodigoStatus;
 
                 return response;
@@ -81,23 +97,21 @@ namespace ENube.Integrations.Application.Services
                 return response;
             }
 
-            //TODO: ID cONTROLE ??
-            //var companyExists = await _CRMService.ExistsCompanyAsync(request.id_controle);
-
-            //if (!companyExists)
-            //{
-            //    response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
-            //    response.statusCode = (int)HttpStatusCode.NotFound;
-
-            //    return response;
-            //}
-
             var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
             var resultCRM = await _CRMService.PostAsync(postCRM);
 
+
             if (!resultCRM.Sucesso)
             {
-                response.erros.Add(resultCRM.Mensagem);
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+
                 response.statusCode = resultCRM.CodigoStatus;
 
                 return response;

@@ -19,9 +19,9 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.name)
-                .Length(5, 50)
+                .Length(4, 50)
                 .When(x => !string.IsNullOrWhiteSpace(x.name))
-                .WithMessage(EENubeErrors.RangeTamanho5A50.GetDescription());
+                .WithMessage(EENubeErrors.RangeTamanho4A50.GetDescription());
 
             RuleFor(x => x.emailAddress)
                 .NotEmpty()

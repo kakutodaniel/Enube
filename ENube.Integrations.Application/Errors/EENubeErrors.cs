@@ -10,8 +10,8 @@ namespace ENube.Integrations.Application.Errors
         [Description("'{PropertyName}' inválido")]
         CampoInvalido,
 
-        [Description("'{PropertyName}' deve ter entre 5 e 50 caracteres")]
-        RangeTamanho5A50,
+        [Description("'{PropertyName}' deve ter entre 4 e 50 caracteres")]
+        RangeTamanho4A50,
 
         [Description("'{PropertyName}' deve ser maior que 0")]
         CampoMaiorQueZero,
@@ -20,7 +20,10 @@ namespace ENube.Integrations.Application.Errors
         Minimo8Digitos,
 
         [Description("Empresa informada não encontrada (empreendimentosId)")]
-        EmpresaNaoEncontrada
+        EmpresaNaoEncontrada,
+
+        [Description("Não autorizado")]
+        Unauthorized
 
         
     }

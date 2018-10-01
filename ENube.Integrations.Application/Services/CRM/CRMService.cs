@@ -9,32 +9,39 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using ENube.Integrations.Application.Services.CRM.Views;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 
 namespace ENube.Integrations.Application.Services.CRM
 {
     public class CRMService
     {
-        protected readonly HttpClient _httpClient;
-        protected readonly CRMSettings _crmSettings;
-        protected readonly ILogger<CRMService> _logger;
+        private readonly HttpClient _httpClient;
+        private readonly CRMSettings _crmSettings;
+        private readonly ILogger<CRMService> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CRMService(
             HttpClient httpClient,
             CRMSettings crmSettings,
-            ILogger<CRMService> logger)
+            ILogger<CRMService> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _crmSettings = crmSettings;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<PostResponse> PostAsync(PostRequest request)
+        public async Task<StatusResponse> PostAsync(PostRequest request)
         {
 
-            var response = new PostResponse();
+            var response = new StatusResponse();
 
             try
             {
+                SetAuthorization();
+
                 var payload = JsonConvert.SerializeObject(request);
 
                 _logger.LogInformation($"Salvando dados no CRM - Payload: [{payload}]");
@@ -54,16 +61,14 @@ namespace ENube.Integrations.Application.Services.CRM
                 else
                 {
                     _logger.LogInformation($"Dados não foram salvos com sucesso no CRM - StatusCode: [{response.CodigoStatus}]");
-                    var headerStatus = result.Headers.GetValues("x-status-reason").FirstOrDefault();
-                    if (headerStatus != null)
+
+                    if (result.Headers.TryGetValues("x-status-reason", out var results))
                     {
+                        var headerStatus = results.FirstOrDefault();
+
                         var headerDataParse = JsonConvert.DeserializeObject<ErrorView>(headerStatus);
                         _logger.LogInformation($"Dados não foram salvos com sucesso no CRM - Reason: [{headerDataParse.reason}]");
                         response.Mensagem = headerDataParse.reason;
-                    }
-                    else
-                    {
-                        response.Mensagem = "I) Erro inesperado ao salvar dados no CRM";
                     }
                 }
             }
@@ -78,29 +83,42 @@ namespace ENube.Integrations.Application.Services.CRM
         }
 
 
-        public async Task<bool> ExistsCompanyAsync(string id)
+        public async Task<StatusResponse> CheckCompanyAsync(string id)
         {
+            var response = new StatusResponse();
 
             try
             {
+                SetAuthorization();
+
                 _logger.LogInformation($"Realizando busca de empresa no CRM - id: [{id}]");
 
                 var result = await _httpClient.GetAsync($"{_crmSettings.GetEndpoint}/{id}");
 
+                response.CodigoStatus = (int)result.StatusCode;
+
                 if (result.IsSuccessStatusCode)
                 {
                     _logger.LogInformation($"Empresa encontrada no CRM - StatusCode: [{(int)result.StatusCode}]");
-                    return true;
+                    response.Sucesso = true;
                 }
-
-                _logger.LogInformation($"Empresa não encontrada no CRM - StatusCode: [{(int)result.StatusCode}]");
-                return false;
+                else
+                {
+                    _logger.LogInformation($"Erro ao realizar busca de empresa no CRM - StatusCode: [{(int)result.StatusCode}]");
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Erro ao realizar busca de empresa no CRM {_crmSettings.UrlBase}/{_crmSettings.GetEndpoint}");
-                return false;
             }
+
+            return response;
+        }
+
+        private void SetAuthorization()
+        {
+            var auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ")[1];
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
         }
     }
 }

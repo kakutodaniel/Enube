@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ENube.Integrations.Application.Contracts;
 using ENube.Integrations.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ENube.Integrations.API.Controllers
@@ -24,6 +23,7 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> PostZap([FromBody] ZapPostRequest request)
         {
             var result = await _leadService.SaveZapLead(request);
@@ -35,6 +35,7 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> PostGeneric([FromBody] PostRequest request)
         {
             var result = await _leadService.SaveGenericLead(request);
@@ -47,6 +48,7 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> Get([FromQuery] PostRequest request)
         {
             var result = await _leadService.SaveGenericLead(request);
