@@ -46,7 +46,7 @@ namespace ENube.Integrations.Application.Validators
                 .NotNull()
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
-            RuleFor(x => x.viuAlgumaComunicaoDoProduto)
+            RuleFor(x => x.midia)
                 .NotEmpty()
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
                 .NotNull()
