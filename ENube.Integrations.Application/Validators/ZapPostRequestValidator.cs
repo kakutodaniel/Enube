@@ -33,7 +33,7 @@ namespace ENube.Integrations.Application.Validators
             RuleFor(x => x.interessado.nome)
                 .Length(4, 50)
                 .When(x => !string.IsNullOrWhiteSpace(x.interessado.nome))
-                .WithMessage(EENubeErrors.RangeTamanho4A50.GetDescription());
+                .WithMessage(EENubeErrors.RangeCaracteres.GetDescription());
 
 
             RuleFor(x => x.interessado.email)
@@ -44,7 +44,7 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.interessado.email)
-                .Must(x => x.EmailValido())
+                .Must(x => x.IsValidEmail())
                 .When(x => !string.IsNullOrWhiteSpace(x.interessado.email))
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
 
@@ -69,8 +69,12 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.interessado.telefone.fone)
-                .MinimumLength(8)
-                .WithMessage(EENubeErrors.Minimo8Digitos.GetDescription());
+                .Must(x => x.IsNumber())
+                .When(x => !string.IsNullOrWhiteSpace(x.interessado.telefone.fone))
+                .WithMessage(EENubeErrors.CampoInvalido.GetDescription())
+                .Length(8, 9)
+                .When(x => !string.IsNullOrEmpty(x.interessado.telefone.fone))
+                .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 
         }
     }

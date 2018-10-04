@@ -21,7 +21,7 @@ namespace ENube.Integrations.Application.Validators
             RuleFor(x => x.name)
                 .Length(4, 50)
                 .When(x => !string.IsNullOrWhiteSpace(x.name))
-                .WithMessage(EENubeErrors.RangeTamanho4A50.GetDescription());
+                .WithMessage(EENubeErrors.RangeCaracteres.GetDescription());
 
             RuleFor(x => x.emailAddress)
                 .NotEmpty()
@@ -30,7 +30,7 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.emailAddress)
-                .Must(x => x.EmailValido())
+                .Must(x => x.IsValidEmail())
                 .When(x => !string.IsNullOrWhiteSpace(x.emailAddress))
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
 
@@ -39,6 +39,14 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
                 .NotNull()
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+
+            RuleFor(x => x.phoneNumber)
+                .Must(x => x.IsNumber())
+                .When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
+                .WithMessage(EENubeErrors.CampoInvalido.GetDescription())
+                .Length(8, 9)
+                .When(x => !string.IsNullOrEmpty(x.phoneNumber))
+                .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 
             RuleFor(x => x.createdById)
                 .NotEmpty()

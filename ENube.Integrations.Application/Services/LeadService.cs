@@ -45,7 +45,7 @@ namespace ENube.Integrations.Application.Services
 
             if (!resultExistsCompany.Sucesso)
             {
-                if(resultExistsCompany.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                if (resultExistsCompany.CodigoStatus == (int)HttpStatusCode.Unauthorized)
                 {
                     response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
                 }
@@ -53,7 +53,7 @@ namespace ENube.Integrations.Application.Services
                 {
                     response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
                 }
-                
+
                 response.statusCode = resultExistsCompany.CodigoStatus;
 
                 return response;
@@ -72,7 +72,7 @@ namespace ENube.Integrations.Application.Services
                 {
                     response.erros.Add(resultCRM.Mensagem);
                 }
-                
+
                 response.statusCode = resultCRM.CodigoStatus;
 
                 return response;
@@ -87,6 +87,44 @@ namespace ENube.Integrations.Application.Services
         {
             var response = new PostResponse();
             var validator = new ZapPostRequestValidator();
+            var results = validator.Validate(request);
+
+            if (!results.IsValid)
+            {
+                results.Errors.ToList().ForEach(x => response.erros.Add(x.ErrorMessage));
+                response.statusCode = (int)HttpStatusCode.BadRequest;
+
+                return response;
+            }
+
+            var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
+            var resultCRM = await _CRMService.PostAsync(postCRM);
+
+
+            if (!resultCRM.Sucesso)
+            {
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+
+                response.statusCode = resultCRM.CodigoStatus;
+
+                return response;
+            }
+
+            response.statusCode = (int)HttpStatusCode.Created;
+            return response;
+        }
+
+        public async Task<PostResponse> SaveVivaRealLead(VivaRealPostRequest request)
+        {
+            var response = new PostResponse();
+            var validator = new VivaRealPostRequestValidator();
             var results = validator.Validate(request);
 
             if (!results.IsValid)

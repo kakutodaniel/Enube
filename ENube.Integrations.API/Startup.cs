@@ -65,7 +65,7 @@ namespace ENube.Integrations
             });
 
             app.UseHttpsRedirection();
-
+            
             app.UseMvc();
         }
     }

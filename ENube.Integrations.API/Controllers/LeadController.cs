@@ -30,6 +30,18 @@ namespace ENube.Integrations.API.Controllers
             return StatusCode(result.statusCode, result);
         }
 
+        [HttpPost("lead/vivareal")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
+        public async Task<IActionResult> PostVivaReal([FromBody] VivaRealPostRequest request)
+        {
+            var result = await _leadService.SaveVivaRealLead(request);
+            return StatusCode(result.statusCode, result);
+        }
+
         [HttpPost("lead")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]

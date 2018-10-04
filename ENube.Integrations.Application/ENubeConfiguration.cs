@@ -15,7 +15,6 @@ using System.Linq;
 using System.Net.Http.Headers;
 using ENube.Integrations.Application.Services;
 using AutoMapper;
-using ENube.Integrations.Application.Mappings;
 using ENube.Integrations.Application.Filters;
 
 namespace ENube.Integrations.Application
@@ -100,19 +99,13 @@ namespace ENube.Integrations.Application
             });
 
             //automapper
-            Mapper.Initialize(config =>
+            services.AddAutoMapper(config => 
             {
                 config.AllowNullCollections = true;
                 config.AllowNullDestinationValues = true;
                 config.CreateMissingTypeMaps = true;
                 config.EnableNullPropagationForQueryMapping = true;
-
-                config.AddProfile(new PostRequestMap());
-                config.AddProfile(new ZapPostRequestMap());
-
             });
-
-            services.TryAddSingleton(Mapper.Instance);
 
             //context
             services.AddHttpContextAccessor();
