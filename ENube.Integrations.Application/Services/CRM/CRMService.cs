@@ -131,6 +131,9 @@ namespace ENube.Integrations.Application.Services.CRM
             var auth = string.Empty;
             var currentPartner = _partnersSettings.Partners.FirstOrDefault(x => x.EPartner == _eNubePartner);
 
+            if (currentPartner == null)
+                return;
+
             if (currentPartner.EnableAuthDefault)
             {
                 auth = $"{currentPartner.User}:{currentPartner.Password}".Base64Encode();
