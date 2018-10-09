@@ -11,24 +11,31 @@ using System.Net;
 using ENube.Integrations.Application.Services.CRM.Views;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
+using ENube.Integrations.Application.Enums;
+using ENube.Integrations.Application.Extensions;
 
 namespace ENube.Integrations.Application.Services.CRM
 {
     public class CRMService
     {
+        public EENubePartners _eNubePartner { get; private set; }
+
         private readonly HttpClient _httpClient;
         private readonly CRMSettings _crmSettings;
+        private readonly PartnersSettings _partnersSettings;
         private readonly ILogger<CRMService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CRMService(
             HttpClient httpClient,
             CRMSettings crmSettings,
+            PartnersSettings partnersSettings,
             ILogger<CRMService> logger,
             IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _crmSettings = crmSettings;
+            _partnersSettings = partnersSettings;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -82,7 +89,6 @@ namespace ENube.Integrations.Application.Services.CRM
             return response;
         }
 
-
         public async Task<StatusResponse> CheckCompanyAsync(string id)
         {
             var response = new StatusResponse();
@@ -115,9 +121,25 @@ namespace ENube.Integrations.Application.Services.CRM
             return response;
         }
 
+        public void SetPartner(EENubePartners eNubePartner)
+        {
+            _eNubePartner = eNubePartner;
+        }
+
         private void SetAuthorization()
         {
-            var auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ")[1];
+            var auth = string.Empty;
+            var currentPartner = _partnersSettings.Partners.FirstOrDefault(x => x.EPartner == _eNubePartner);
+
+            if (currentPartner.EnableAuthDefault)
+            {
+                auth = $"{currentPartner.User}:{currentPartner.Password}".Base64Encode();
+            }
+            else
+            {
+                auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ")[1];
+            }
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
         }
     }

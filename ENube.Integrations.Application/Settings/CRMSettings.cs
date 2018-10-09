@@ -3,7 +3,7 @@
     public class CRMSettings
     {
 
-        public static string Section = "CRM";
+        public static string Section = "CRMSettings";
 
         public string UrlBase { get; set; }
 

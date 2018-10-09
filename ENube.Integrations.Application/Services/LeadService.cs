@@ -41,6 +41,8 @@ namespace ENube.Integrations.Application.Services
                 return response;
             }
 
+            _CRMService.SetPartner(Enums.EENubePartners.Generic);
+
             var resultExistsCompany = await _CRMService.CheckCompanyAsync(request.empreendimentosId);
 
             if (!resultExistsCompany.Sucesso)
@@ -82,7 +84,6 @@ namespace ENube.Integrations.Application.Services
             return response;
         }
 
-
         public async Task<PostResponse> SaveZapLead(ZapPostRequest request)
         {
             var response = new PostResponse();
@@ -96,6 +97,8 @@ namespace ENube.Integrations.Application.Services
 
                 return response;
             }
+
+            _CRMService.SetPartner(Enums.EENubePartners.Zap);
 
             var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
             var resultCRM = await _CRMService.PostAsync(postCRM);
@@ -134,6 +137,8 @@ namespace ENube.Integrations.Application.Services
 
                 return response;
             }
+
+            _CRMService.SetPartner(Enums.EENubePartners.VivaReal);
 
             var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
             var resultCRM = await _CRMService.PostAsync(postCRM);

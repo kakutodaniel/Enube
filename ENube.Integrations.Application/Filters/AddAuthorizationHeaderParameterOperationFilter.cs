@@ -16,8 +16,8 @@ namespace ENube.Integrations.Application.Filters
                 Name = "Authorization",
                 In = "header",
                 Type = "string",
-                Description = "Auth token",
-                Required = true
+                Description = "Basic Token",
+                Required = false
             });
 
         }

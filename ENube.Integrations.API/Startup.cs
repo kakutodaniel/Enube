@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ENube.Integrations.Application.Middlewares;
 
 namespace ENube.Integrations
 {
@@ -51,7 +50,6 @@ namespace ENube.Integrations
                 app.UseHsts();
             }
 
-            app.UseMiddleware<BasicAuthMiddleware>("");
             app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseResponseCompression();
 
