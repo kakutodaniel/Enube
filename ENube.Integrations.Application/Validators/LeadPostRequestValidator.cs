@@ -13,9 +13,7 @@ namespace ENube.Integrations.Application.Validators
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
             RuleFor(x => x.name)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.name)
@@ -24,9 +22,7 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.RangeCaracteres.GetDescription());
 
             RuleFor(x => x.emailAddress)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.emailAddress)
@@ -35,9 +31,7 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
 
             RuleFor(x => x.phoneNumber)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.phoneNumber)
@@ -49,21 +43,15 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 
             RuleFor(x => x.createdById)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.midia)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.empreendimentosId)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
         }

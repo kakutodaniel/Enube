@@ -15,16 +15,12 @@ namespace ENube.Integrations.Application.Validators
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
             RuleFor(x => x.leadOrigin)
-                 .NotEmpty()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                 .NotNull()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+                .Must(x => !string.IsNullOrEmpty(x))
+                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.timestamp)
-                .NotEmpty()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                 .NotNull()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+                .Must(x => !string.IsNullOrEmpty(x))
+                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
             RuleFor(x => x.timestamp)
@@ -34,28 +30,20 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.originLeadId)
-                 .NotEmpty()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                 .NotNull()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+                .Must(x => !string.IsNullOrEmpty(x))
+                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
             RuleFor(x => x.originListingId)
-                 .NotEmpty()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                 .NotNull()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+                .Must(x => !string.IsNullOrEmpty(x))
+                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.clientListingId)
-                 .NotEmpty()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                 .NotNull()
-                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+                .Must(x => !string.IsNullOrEmpty(x))
+                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.name)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.name)
@@ -64,9 +52,7 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.RangeCaracteres.GetDescription());
 
             RuleFor(x => x.email)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.email)
@@ -102,9 +88,7 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.message)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
         }

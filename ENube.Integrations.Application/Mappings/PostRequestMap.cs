@@ -20,7 +20,9 @@ namespace ENube.Integrations.Application.Mappings
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
                 .ForMember(dest => dest.Midia, opt => opt.MapFrom(src => src.midia))
                 .ForMember(dest => dest.Origem, opt => opt.MapFrom(src => src.source))
-                .ForMember(dest => dest.CriadoPorId, opt => opt.MapFrom(src => src.createdById));
+                .ForMember(dest => dest.CriadoPorId, opt => opt.MapFrom(src => src.createdById))
+                .ForMember(dest => dest.EmpresaResponsavelId, opt => opt.MapFrom(src => src.empresaResponsavelId))
+                .ForMember(dest => dest.EmpreendimentosId, opt => opt.MapFrom(src => src.empreendimentosId));
         }
 
     }

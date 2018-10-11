@@ -14,9 +14,7 @@ namespace ENube.Integrations.Application.Validators
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
             RuleFor(x => x.id_cliente)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => x != default(int))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
@@ -25,10 +23,9 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoMaiorQueZero.GetDescription());
 
             RuleFor(x => x.interessado.nome)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+
 
             RuleFor(x => x.interessado.nome)
                 .Length(4, 50)
@@ -37,9 +34,7 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.interessado.email)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
@@ -50,9 +45,7 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.interessado.telefone.ddd)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => x != default(int))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
@@ -62,9 +55,7 @@ namespace ENube.Integrations.Application.Validators
 
 
             RuleFor(x => x.interessado.telefone.fone)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 

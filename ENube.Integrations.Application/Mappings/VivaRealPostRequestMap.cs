@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ENube.Integrations.Application.Contracts;
-using API = ENube.Integrations.Application.Services.CRM.Contracts;
+using CRM = ENube.Integrations.Application.Services.CRM.Contracts;
 using ENube.Integrations.Application.Extensions;
 
 namespace ENube.Integrations.Application.Mappings
@@ -12,7 +12,7 @@ namespace ENube.Integrations.Application.Mappings
         {
 
 
-            CreateMap<VivaRealPostRequest, API.PostRequest>()
+            CreateMap<VivaRealPostRequest, CRM.PostRequest>()
                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.name))
                 .ForMember(dest => dest.Origem, opt => opt.MapFrom(src => src.leadOrigin))
                 .ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.timestamp))
