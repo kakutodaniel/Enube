@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: api-enube
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-enube
+    spec:
+      containers:
+      - image: gcr.io/dotzcloud-qa/api-enube:latest
+        name: api-enube
+        ports:
+        - containerPort: 80
+          protocol: TCP
