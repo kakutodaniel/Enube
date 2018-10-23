@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-enube-ingress
+  namespace: default
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: api-enube.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: api-enube
+          servicePort: 80

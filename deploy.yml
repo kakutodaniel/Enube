@@ -8,7 +8,7 @@ spec:
   template:
     metadata:
       labels:
-        app: api-enube
+        run: api-enube
     spec:
       containers:
       - image: gcr.io/dotzcloud-qa/api-enube:latest
