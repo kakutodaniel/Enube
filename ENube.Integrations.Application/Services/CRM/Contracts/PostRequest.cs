@@ -57,6 +57,10 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
         [JsonProperty("source")]
         public string Origem { get; set; }
 
+
+        [JsonProperty("tag")]
+        public string[] Tag { get; set; } = new string[] { "compartilhar" };
+
     }
 }
 

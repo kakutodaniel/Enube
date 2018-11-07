@@ -140,7 +140,7 @@ namespace ENube.Integrations.Application.Services.CRM
             }
             else
             {
-                auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ")[1];
+                auth = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault();//?.Split(" ")[1];
             }
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);

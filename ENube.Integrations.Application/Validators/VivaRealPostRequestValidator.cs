@@ -18,15 +18,15 @@ namespace ENube.Integrations.Application.Validators
                 .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
-            RuleFor(x => x.timestamp)
-                .Must(x => !string.IsNullOrEmpty(x))
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
+            //RuleFor(x => x.timestamp)
+            //    .Must(x => !string.IsNullOrEmpty(x))
+            //    .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
 
-            RuleFor(x => x.timestamp)
-                .Must(x => x.IsValidDate())
-                 .When(x => !string.IsNullOrWhiteSpace(x.timestamp))
-                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
+            //RuleFor(x => x.timestamp)
+            //    .Must(x => x.IsValidDate())
+            //     .When(x => !string.IsNullOrWhiteSpace(x.timestamp))
+            //     .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
 
 
             RuleFor(x => x.originLeadId)
@@ -73,7 +73,7 @@ namespace ENube.Integrations.Application.Validators
                 .Must(x => x.IsNumber())
                 .When(x => !string.IsNullOrWhiteSpace(x.phone))
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription())
-                .Length(8, 9)
+                .Length(8, 15)
                 .When(x => !string.IsNullOrWhiteSpace(x.phone))
                 .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 
@@ -82,7 +82,7 @@ namespace ENube.Integrations.Application.Validators
                 .Must(x => x.IsNumber())
                 .When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription())
-                .Length(8, 9)
+                .Length(8, 15)
                 .When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
                 .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 

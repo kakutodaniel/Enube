@@ -6,6 +6,6 @@
 
         VivaReal = 2,
 
-        Generic = 999
+        Generic = 99
     }
 }

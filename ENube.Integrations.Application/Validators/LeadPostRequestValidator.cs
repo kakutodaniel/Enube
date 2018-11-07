@@ -35,10 +35,10 @@ namespace ENube.Integrations.Application.Validators
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.phoneNumber)
-                .Must(x => x.IsNumber())
-                .When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
-                .WithMessage(EENubeErrors.CampoInvalido.GetDescription())
-                .Length(8, 9)
+                ////.Must(x => x.IsNumber())
+                //.When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
+                //.WithMessage(EENubeErrors.CampoInvalido.GetDescription())
+                .Length(8, 15)
                 .When(x => !string.IsNullOrEmpty(x.phoneNumber))
                 .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
 
