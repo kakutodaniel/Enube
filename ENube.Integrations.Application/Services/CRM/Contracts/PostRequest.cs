@@ -55,7 +55,7 @@ namespace ENube.Integrations.Application.Services.CRM.Contracts
         public string Midia { get; set; }
 
         [JsonProperty("source")]
-        public string Origem { get; set; }
+        public string Origem { get; set; } = "Campanha Online";
 
 
         [JsonProperty("tag")]

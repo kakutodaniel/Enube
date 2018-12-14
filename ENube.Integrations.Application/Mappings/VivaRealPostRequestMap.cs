@@ -14,7 +14,8 @@ namespace ENube.Integrations.Application.Mappings
 
             CreateMap<VivaRealPostRequest, CRM.PostRequest>()
                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.name))
-                .ForMember(dest => dest.Origem, opt => opt.MapFrom(src => src.leadOrigin))
+                //.ForMember(dest => dest.Origem, opt => opt.MapFrom(src => src)) //Campanha Online
+                .ForMember(dest => dest.Midia, opt => opt.MapFrom(src => src.leadOrigin))
                 //.ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.timestamp))
                 .ForMember(dest => dest.CriadoPorId, opt => opt.MapFrom(src => src.originLeadId))
                 .ForMember(dest => dest.EmpreendimentosId, opt => opt.MapFrom(src => src.originListingId))
