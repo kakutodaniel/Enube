@@ -23,9 +23,22 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> PostZap([FromBody] ZapPostRequest request)
         {
             var result = await _leadService.SaveZapLead(request);
+            return StatusCode(result.statusCode, result);
+        }
+
+        [HttpPost("lead/vivareal")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
+        public async Task<IActionResult> PostVivaReal([FromBody] VivaRealPostRequest request)
+        {
+            var result = await _leadService.SaveVivaRealLead(request);
             return StatusCode(result.statusCode, result);
         }
 
@@ -34,6 +47,7 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> PostGeneric([FromBody] PostRequest request)
         {
             var result = await _leadService.SaveGenericLead(request);
@@ -46,6 +60,7 @@ namespace ENube.Integrations.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest, Type = typeof(PostResponse))]
         [ProducesResponseType((int)HttpStatusCode.NotFound, Type = typeof(PostResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized, Type = typeof(PostResponse))]
         public async Task<IActionResult> Get([FromQuery] PostRequest request)
         {
             var result = await _leadService.SaveGenericLead(request);

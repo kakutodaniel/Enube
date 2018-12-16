@@ -17,6 +17,8 @@
 
         public string source { get; set; }
 
+        public string empresaResponsavelId { get; set; }
+
         public string empreendimentosId { get; set; }
     }
 }

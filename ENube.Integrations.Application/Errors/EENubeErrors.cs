@@ -10,17 +10,29 @@ namespace ENube.Integrations.Application.Errors
         [Description("'{PropertyName}' inválido")]
         CampoInvalido,
 
-        [Description("'{PropertyName}' deve ter entre 5 e 50 caracteres")]
-        RangeTamanho5A50,
+        [Description("'{PropertyName}' deve ter entre {MinLength} e {MaxLength} caracteres")]
+        RangeCaracteres,
 
         [Description("'{PropertyName}' deve ser maior que 0")]
         CampoMaiorQueZero,
 
-        [Description("'{PropertyName}' deve ter no mínimo 8 dígitos")]
-        Minimo8Digitos,
+        [Description("'{PropertyName}' deve ter no mínimo {MinLength} dígitos")]
+        QuantidadeMinimaDigitos,
+
+        [Description("'{PropertyName}' deve ter no máximo {MaxLength} dígitos")]
+        QuantidadeMaximaDigitos,
+
+        [Description("'{PropertyName}' deve ter entre {MinLength} e {MaxLength} dígitos")]
+        RangeDigitos,
 
         [Description("Empresa informada não encontrada (empreendimentosId)")]
-        EmpresaNaoEncontrada
+        EmpresaNaoEncontrada,
+
+        [Description("'{PropertyName}' deve ter {MaxLength} caracteres")]
+        QuantidadeCaracteresFixo,
+
+        [Description("Não autorizado")]
+        Unauthorized
 
         
     }

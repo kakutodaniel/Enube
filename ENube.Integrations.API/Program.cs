@@ -12,7 +12,7 @@ namespace ENube.Integrations.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseEnvironment("Development")
+                .UseEnvironment("Production")
                 .UseStartup<Startup>();
     }
 }

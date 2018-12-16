@@ -13,18 +13,18 @@ namespace ENube.Integrations.Application.Services
 {
     public class LeadService
     {
-        protected readonly ILogger<LeadService> _logger;
-        protected readonly CRMService _CRMService;
-        protected readonly IMapper _mapper;
+        private readonly ILogger<LeadService> _logger;
+        private readonly IMapper _mapper;
+        private readonly CRMService _CRMService;
 
         public LeadService(
             ILogger<LeadService> logger,
-            CRMService CRMService,
-            IMapper mapper)
+            IMapper mapper,
+            CRMService CRMService)
         {
             _logger = logger;
-            _CRMService = CRMService;
             _mapper = mapper;
+            _CRMService = CRMService;
         }
 
         public async Task<PostResponse> SaveGenericLead(PostRequest request)
@@ -41,12 +41,22 @@ namespace ENube.Integrations.Application.Services
                 return response;
             }
 
-            var companyExists = await _CRMService.ExistsCompanyAsync(request.empreendimentosId);
+            _CRMService.SetPartner(Enums.EENubePartners.Generic);
 
-            if (!companyExists)
+            var resultExistsCompany = await _CRMService.CheckCompanyAsync(request.empreendimentosId);
+
+            if (!resultExistsCompany.Sucesso)
             {
-                response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
-                response.statusCode = (int)HttpStatusCode.NotFound;
+                if (resultExistsCompany.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
+                }
+
+                response.statusCode = resultExistsCompany.CodigoStatus;
 
                 return response;
             }
@@ -56,7 +66,15 @@ namespace ENube.Integrations.Application.Services
 
             if (!resultCRM.Sucesso)
             {
-                response.erros.Add(resultCRM.Mensagem);
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+
                 response.statusCode = resultCRM.CodigoStatus;
 
                 return response;
@@ -65,7 +83,6 @@ namespace ENube.Integrations.Application.Services
             response.statusCode = (int)HttpStatusCode.Created;
             return response;
         }
-
 
         public async Task<PostResponse> SaveZapLead(ZapPostRequest request)
         {
@@ -81,23 +98,63 @@ namespace ENube.Integrations.Application.Services
                 return response;
             }
 
-            //TODO: ID cONTROLE ??
-            var companyExists = await _CRMService.ExistsCompanyAsync(request.id_controle);
-
-            if (!companyExists)
-            {
-                response.erros.Add(EENubeErrors.EmpresaNaoEncontrada.GetDescription());
-                response.statusCode = (int)HttpStatusCode.NotFound;
-
-                return response;
-            }
+            _CRMService.SetPartner(Enums.EENubePartners.Zap);
 
             var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
             var resultCRM = await _CRMService.PostAsync(postCRM);
 
+
             if (!resultCRM.Sucesso)
             {
-                response.erros.Add(resultCRM.Mensagem);
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+
+                response.statusCode = resultCRM.CodigoStatus;
+
+                return response;
+            }
+
+            response.statusCode = (int)HttpStatusCode.Created;
+            return response;
+        }
+
+        public async Task<PostResponse> SaveVivaRealLead(VivaRealPostRequest request)
+        {
+            var response = new PostResponse();
+            var validator = new VivaRealPostRequestValidator();
+            var results = validator.Validate(request);
+
+            if (!results.IsValid)
+            {
+                results.Errors.ToList().ForEach(x => response.erros.Add(x.ErrorMessage));
+                response.statusCode = (int)HttpStatusCode.BadRequest;
+
+                return response;
+            }
+
+            _CRMService.SetPartner(Enums.EENubePartners.VivaReal);
+
+            var postCRM = _mapper.Map<CRM.Contracts.PostRequest>(request);
+            var resultCRM = await _CRMService.PostAsync(postCRM);
+
+
+            if (!resultCRM.Sucesso)
+            {
+                if (resultCRM.CodigoStatus == (int)HttpStatusCode.Unauthorized)
+                {
+                    response.erros.Add(EENubeErrors.Unauthorized.GetDescription());
+                }
+                else
+                {
+                    response.erros.Add(resultCRM.Mensagem);
+                }
+
                 response.statusCode = resultCRM.CodigoStatus;
 
                 return response;

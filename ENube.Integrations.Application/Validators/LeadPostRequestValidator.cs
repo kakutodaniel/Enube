@@ -13,49 +13,45 @@ namespace ENube.Integrations.Application.Validators
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
             RuleFor(x => x.name)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.name)
-                .Length(5, 50)
+                .Length(4, 50)
                 .When(x => !string.IsNullOrWhiteSpace(x.name))
-                .WithMessage(EENubeErrors.RangeTamanho5A50.GetDescription());
+                .WithMessage(EENubeErrors.RangeCaracteres.GetDescription());
 
             RuleFor(x => x.emailAddress)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.emailAddress)
-                .Must(x => x.EmailValido())
+                .Must(x => x.IsValidEmail())
                 .When(x => !string.IsNullOrWhiteSpace(x.emailAddress))
                 .WithMessage(EENubeErrors.CampoInvalido.GetDescription());
 
             RuleFor(x => x.phoneNumber)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
+            RuleFor(x => x.phoneNumber)
+                ////.Must(x => x.IsNumber())
+                //.When(x => !string.IsNullOrWhiteSpace(x.phoneNumber))
+                //.WithMessage(EENubeErrors.CampoInvalido.GetDescription())
+                .Length(8, 15)
+                .When(x => !string.IsNullOrEmpty(x.phoneNumber))
+                .WithMessage(EENubeErrors.RangeDigitos.GetDescription());
+
             RuleFor(x => x.createdById)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.midia)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
             RuleFor(x => x.empreendimentosId)
-                .NotEmpty()
-                .WithMessage(EENubeErrors.CampoRequerido.GetDescription())
-                .NotNull()
+                .Must(x => !string.IsNullOrEmpty(x))
                 .WithMessage(EENubeErrors.CampoRequerido.GetDescription());
 
         }
